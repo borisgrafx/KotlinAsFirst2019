@@ -69,7 +69,8 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int = hours * 3600 + minute
  * Определить длину того же отрезка в метрах (в данном случае 18.98).
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
-fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = (sagenes * 48 * 4.445 + arshins * 16 * 4.445 + vershoks * 4.445).toDouble() / 100
+fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
+    (sagenes * 48 * 4.445 + arshins * 16 * 4.445 + vershoks * 4.445).toDouble() / 100
 
 
 /**
@@ -106,7 +107,8 @@ fun thirdDigit(number: Int): Int = ((number / 10) / 10) % 10
  * прибыл на станцию назначения в h2 часов m2 минут того же дня (например в 13:01).
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
-fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int = (hoursArrive - hoursDepart) * 60 + minutesArrive - minutesDepart
+fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int =
+    (hoursArrive - hoursDepart) * 60 + minutesArrive - minutesDepart
 
 
 /**
@@ -116,7 +118,8 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Сколько денег будет на счету через 3 года (с учётом сложных процентов)?
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
-fun accountInThreeYears(initial: Int, percent: Int): Double = initial.toDouble() * (1 + percent * 0.01) * (1 + percent * 0.01) * (1 + percent * 0.01)
+fun accountInThreeYears(initial: Int, percent: Int): Double =
+    initial.toDouble() * (1 + percent * 0.01).pow(3)
 // b = p%*0.01;  c = 1 + p%*0.01;  S3 = S0*c*c*c
 
 /**

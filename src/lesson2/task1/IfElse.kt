@@ -150,9 +150,9 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int = when {
-    (max(a, max(b, c))).pow(2) > (min(a, b)).pow(2) + (min(b, c)).pow(2) -> 2
-    (max(a, max(b, c))).pow(2) == (min(a, b)).pow(2) + (min(b, c)).pow(2) -> 1
-    (max(a, max(b, c))).pow(2) < (min(a, b)).pow(2) + (min(b, c)).pow(2) -> 0
+    (a * a + b * b == c * c) || (a * a + c * c == b * b) || (b * b + c * c == a * a) -> 1
+    (a * a + b * b > c * c) && (a * a + c * c > b * b) && (b * b + c * c > a * a) -> 0
+    (a + b > c) && (a + c > b) && (b + c > a) -> 2
     else -> -1
 }
 

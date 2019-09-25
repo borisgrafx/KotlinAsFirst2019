@@ -3,6 +3,9 @@
 package lesson3.task1
 
 import kotlin.math.sqrt
+import kotlin.math.max
+import kotlin.math.pow
+import kotlin.math.abs
 
 /**
  * Пример
@@ -67,7 +70,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var l: Int = n
+    var k: Int = 1
+    while (l > 9) {
+        l /= 10
+        k += 1
+    }
+    return k
+}
 
 /**
  * Простая
@@ -75,7 +86,9 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+
+fun fib(n: Int): Int = if (n < 3) 1 else (fib(n - 2) + fib(n - 1))
+
 
 /**
  * Простая
@@ -83,21 +96,34 @@ fun fib(n: Int): Int = TODO()
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var k: Int = m * n
+    for (i in max(m, n)..m * n) if ((i % m == 0) && (i % n == 0) && (i < k)) k = i
+    return k
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var x: Int = Int.MAX_VALUE
+    for (i in 2..n) if ((n % i == 0) && (i <= x)) x = i
+    return x
+}
+
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var x: Int = 0
+    for (i in 1 until n) if ((n % i == 0) && (i > x)) x = i
+    return x
+}
 
 /**
  * Простая
@@ -106,7 +132,11 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var k: Boolean = true
+    for (i in 2..max(m, n)) if ((m % i == 0) && (n % i == 0)) k = false
+    return k
+}
 
 /**
  * Простая
@@ -115,7 +145,11 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var k: Boolean = false
+    for (i in m..n) if ((sqrt(i.toDouble()).toInt()) * (sqrt(i.toDouble()).toInt()) == i) k = true
+    return k
+}
 
 /**
  * Средняя
@@ -133,7 +167,15 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var k: Int = 0
+    var l: Int = x
+    while (l != 1) {
+        if (l % 2 == 0) l /= 2 else l = 3 * l + 1
+        k += 1
+    }
+    return k
+}
 
 /**
  * Средняя
@@ -145,6 +187,27 @@ fun collatzSteps(x: Int): Int = TODO()
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double = TODO()
+
+// К сожалению, алгоритм пока не работает((( Но где я ошибся?!
+/**{
+var sinus: Double = x
+var k: Int = 3
+var n: Int = 2 * 3
+var second: Boolean = false
+while (abs(x.pow(k) / n) >= abs(eps)) {
+if (!second) {
+sinus -= x.pow(k) / n
+second = true
+} else {
+sinus += x.pow(k) / n
+second = false
+}
+k += 2
+n *= (k - 1) * k
+}
+return sinus
+}
+ */
 
 /**
  * Средняя
@@ -164,7 +227,15 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var l: Int = n
+    var num: Int = 0
+    while (l > 0) {
+        num = (num + l % 10) * 10
+        l /= 10
+    }
+    return num / 10
+}
 
 /**
  * Средняя

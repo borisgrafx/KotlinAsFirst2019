@@ -71,7 +71,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var l: Int = n
+    var l: Int = abs(n)
     var k: Int = 1
     while (l > 9) {
         l /= 10
@@ -231,10 +231,11 @@ fun revert(n: Int): Int {
     var l: Int = n
     var num: Int = 0
     while (l > 0) {
-        num = (num + l % 10) * 10
+
+        if (l / 10 != 0) num = (num + l % 10) * 10 else num += l % 10
         l /= 10
     }
-    return num / 10
+    return num
 }
 
 /**
@@ -256,7 +257,17 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var l: Int = abs(n)
+    var j: Int = l % 10
+    var bool: Boolean = false
+    while (l > 9) {
+        if ((l / 10) % 10 != j) bool = true
+        l /= 10
+        j = l % 10
+    }
+    return if (abs(n) < 10) false else bool
+}
 
 /**
  * Сложная
@@ -268,6 +279,37 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int = TODO()
+// Пока не готово
+/**{
+    var k: Int = 1
+    var j: Int = 1
+    var big: Long = 1
+    var num: Int = 0
+    var square: Int = 0
+    var ten: Long = 10
+    while (j != n) {
+        j += num
+        ten = 10
+        k += 1
+        square = k * k
+        num = 0
+        while (square != 0) {
+            num += 1
+            square /= 10
+        }
+        for (i in 1..num) ten *= 10
+        big = big * 10 + k * k
+        for (i in 1..num) {
+            if (j + i == n) {
+                j = n
+            }
+        }
+    }
+    big %= 10
+    return big.toInt()
+}
+*/
+
 
 /**
  * Сложная

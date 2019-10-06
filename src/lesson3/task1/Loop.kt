@@ -329,8 +329,8 @@ fun squareSequenceDigit(n: Int): Int
         totalnum = totalnum * ((10.toDouble()).pow(digitNumber(numinsqr * numinsqr))).toInt() + numinsqr * numinsqr
         numodig += digitNumber(numinsqr * numinsqr)
         numinsqr += 1
-        if (numodig < n && totalnum > 10000)
-            totalnum %= 10
+        if (numodig < n && totalnum > 10)
+            totalnum = 0
     }
     if (numodig > n)
         for (i in 1..numodig - n)
@@ -356,8 +356,8 @@ fun fibSequenceDigit(n: Int): Int {
         totalnum = totalnum * ((10.toDouble()).pow(digitNumber(fib(numfib)))).toInt() + fib(numfib)
         numodig += digitNumber(fib(numfib))
         numfib += 1
-        if (numodig < n && totalnum > 10000)
-            totalnum %= 10
+        if (numodig < n && totalnum > 10)
+            totalnum = 0
     }
     if (numodig > n)
         for (i in 1..numodig - n)

@@ -87,9 +87,17 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-
-//Тут пока долго делается. До октябрьской проверки попробую придумать метод оптимизации.
-fun fib(n: Int): Int = if (n < 3) 1 else (fib(n - 2) + fib(n - 1))
+fun fib(n: Int): Int {
+    var k = 1
+    var n1 = 1
+    var n2 = 0
+    while (k != n) {
+        k += 1
+        n1 += n2
+        n2 = n1 - n2
+    }
+    return n1
+}
 
 
 /**
@@ -117,7 +125,6 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-
     for (i in 2..sqrt(n.toDouble()).toInt())
         if (n % i == 0)
             return i
@@ -156,12 +163,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    //Тут пока долго делается. До октябрьской проверки попробую придумать метод оптимизации.
-    var k = false
     for (i in m..n)
         if ((sqrt(i.toDouble()).toInt()) * (sqrt(i.toDouble()).toInt()) == i)
-            k = true
-    return k
+            return true
+    return false
 }
 
 /**
@@ -202,32 +207,26 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    //Ура!!! Решилось! Правда, структура алгоритма, наверное, ужасна.
+    var sinus: Double = x % (2 * PI)
+    var k = 3
+    var n = 2 * 3.0
+    var second = false
+    while (abs((x % (2 * PI)).pow(k) / n) >= abs(eps)) {
+        if (!second) {
+            sinus -= abs((x % (2 * PI)).pow(k)) / n
+            second = true
+        } else {
+            sinus += abs((x % (2 * PI)).pow(k)) / n
+            second = false
+        }
+        k += 2
+        n *= (k - 1) * k
+    }
+    return sinus
+}
 
-// К сожалению, алгоритм пока не работает((( Но где я ошибся?!
-// upd: До сих пор не работает, хотя я напряг мозги и попытался вспомнить тригонометрию с её  2 * PI
-// и некой цикличностью sin. Нужна помощь!
-// P.S. пока мой алгоритм подразумевает, что sin при любом x будет положителен. Исправлю это, когда будут нормально
-// проходить тесты там, где sin ДОЛЖЕН быть положительным.
-/*{
-var sinus: Double = x % (2 * PI)
-var k = 3
-var n = 2 * 3
-var second = false
-while (abs((x % (2 * PI)).pow(k) / n) >= abs(eps)) {
-if (!second) {
-sinus -= abs((x % (2 * PI)).pow(k)) / n
-second = true
-} else {
-sinus += abs((x % (2 * PI)).pow(k)) / n
-second = false
-}
-k += 2
-n *= (k - 1) * k
-}
-return sinus
-}
-*/
 
 /**
  * Средняя
@@ -238,7 +237,16 @@ return sinus
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    return when {
+        //Выглядит страшно, но Котлин попросил так отформатировать.
+        ((x % (2 * PI) >= 0 && x % (2 * PI) < PI / 2) || (x % (2 * PI) > 1.5 * PI && x % (2 * PI) <= 2 * PI)) -> sqrt(
+            1 - (sin(x, eps)).pow(2)
+        )
+        ((x % (2 * PI) > PI / 2 && x % (2 * PI) < 1.5 * PI)) -> -1 * sqrt(1 - sin(x, eps) * sin(x, eps))
+        else -> 0.0
+    }
+}
 
 /**
  * Средняя
@@ -272,16 +280,16 @@ fun revert(n: Int): Int {
 
 
 fun isPalindrome(n: Int): Boolean {
+    //Решение через revert в моём видении
     var r = revert(abs(n))
     var l = abs(n)
-    var bool = true
     while (l > 0) {
         if (l % 10 != r % 10)
-            bool = false
+            return false
         r /= 10
         l /= 10
     }
-    return bool
+    return true
 }
 
 /**
@@ -294,18 +302,12 @@ fun isPalindrome(n: Int): Boolean {
  */
 fun hasDifferentDigits(n: Int): Boolean {
     var l = abs(n)
-    var j = l % 10
-    var bool = false
     while (l > 9) {
-        if ((l / 10) % 10 != j)
-            bool = true
+        if ((l / 10) % 10 != l % 10)
+            return true
         l /= 10
-        j = l % 10
     }
-    return if (abs(n) < 10)
-        false
-    else
-        bool
+    return false
 }
 
 /**
@@ -317,37 +319,24 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
-// Пока не готово
-/**{
-var k: Int = 1
-var j: Int = 1
-var big: Long = 1
-var num: Int = 0
-var square: Int = 0
-var ten: Long = 10
-while (j != n) {
-j += num
-ten = 10
-k += 1
-square = k * k
-num = 0
-while (square != 0) {
-num += 1
-square /= 10
+fun squareSequenceDigit(n: Int): Int
+// Круто, у меня получилось решить обе сложные задачи! Надеюсь, что я не напортачил с алгоритмом.
+{
+    var totalnum = 1
+    var numinsqr = 2
+    var numodig = 1
+    while (numodig < n) {
+        totalnum = totalnum * ((10.toDouble()).pow(digitNumber(numinsqr * numinsqr))).toInt() + numinsqr * numinsqr
+        numodig += digitNumber(numinsqr * numinsqr)
+        numinsqr += 1
+        if (numodig < n && totalnum > 10000)
+            totalnum %= 10
+    }
+    if (numodig > n)
+        for (i in 1..numodig - n)
+            totalnum /= 10
+    return totalnum % 10
 }
-for (i in 1..num) ten *= 10
-big = big * 10 + k * k
-for (i in 1..num) {
-if (j + i == n) {
-j = n
-}
-}
-}
-big %= 10
-return big.toInt()
-}
- */
 
 
 /**
@@ -359,4 +348,19 @@ return big.toInt()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var totalnum = 1
+    var numfib = 2
+    var numodig = 1
+    while (numodig < n) {
+        totalnum = totalnum * ((10.toDouble()).pow(digitNumber(fib(numfib)))).toInt() + fib(numfib)
+        numodig += digitNumber(fib(numfib))
+        numfib += 1
+        if (numodig < n && totalnum > 10000)
+            totalnum %= 10
+    }
+    if (numodig > n)
+        for (i in 1..numodig - n)
+            totalnum /= 10
+    return totalnum % 10
+}

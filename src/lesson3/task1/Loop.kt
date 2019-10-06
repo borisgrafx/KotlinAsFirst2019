@@ -215,10 +215,10 @@ fun sin(x: Double, eps: Double): Double {
     var second = false
     while (abs((x % (2 * PI)).pow(k) / n) >= abs(eps)) {
         if (!second) {
-            sinus -= abs((x % (2 * PI)).pow(k)) / n
+            sinus -= (x % (2 * PI)).pow(k) / n
             second = true
         } else {
-            sinus += abs((x % (2 * PI)).pow(k)) / n
+            sinus += (x % (2 * PI)).pow(k) / n
             second = false
         }
         k += 2
@@ -239,7 +239,7 @@ fun sin(x: Double, eps: Double): Double {
  */
 fun cos(x: Double, eps: Double): Double {
     return when {
-        //Выглядит страшно, но Котлин попросил так отформатировать.
+        //К сожалению, данная программа не работает. Нужна помощь!
         ((x % (2 * PI) >= 0 && x % (2 * PI) < PI / 2) || (x % (2 * PI) > 1.5 * PI && x % (2 * PI) <= 2 * PI)) -> sqrt(
             1 - (sin(x, eps)).pow(2)
         )
@@ -322,7 +322,7 @@ fun hasDifferentDigits(n: Int): Boolean {
 fun squareSequenceDigit(n: Int): Int
 // Круто, у меня получилось решить обе сложные задачи! Надеюсь, что я не напортачил с алгоритмом.
 {
-    var totalnum = 1
+    var totalnum: Long = 1
     var numinsqr = 2
     var numodig = 1
     while (numodig < n) {
@@ -335,7 +335,7 @@ fun squareSequenceDigit(n: Int): Int
     if (numodig > n)
         for (i in 1..numodig - n)
             totalnum /= 10
-    return totalnum % 10
+    return totalnum.toInt() % 10
 }
 
 
@@ -349,7 +349,7 @@ fun squareSequenceDigit(n: Int): Int
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var totalnum = 1
+    var totalnum: Long = 1
     var numfib = 2
     var numodig = 1
     while (numodig < n) {
@@ -362,5 +362,5 @@ fun fibSequenceDigit(n: Int): Int {
     if (numodig > n)
         for (i in 1..numodig - n)
             totalnum /= 10
-    return totalnum % 10
+    return totalnum.toInt() % 10
 }

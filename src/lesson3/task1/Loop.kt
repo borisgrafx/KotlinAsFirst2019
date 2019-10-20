@@ -238,14 +238,22 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    return when {
-        //К сожалению, данная программа не работает. Нужна помощь!
-        ((x % (2 * PI) >= 0 && x % (2 * PI) < PI / 2) || (x % (2 * PI) > 1.5 * PI && x % (2 * PI) <= 2 * PI)) -> sqrt(
-            1 - (sin(x, eps)).pow(2)
-        )
-        ((x % (2 * PI) > PI / 2 && x % (2 * PI) < 1.5 * PI)) -> -1 * sqrt(1 - sin(x, eps) * sin(x, eps))
-        else -> 0.0
+    var cosinus: Double = 1.0
+    var k = 2
+    var n = 2.0
+    var second = false
+    while (abs((x % (2 * PI)).pow(k) / n) >= abs(eps)) {
+        if (!second) {
+            cosinus -= (x % (2 * PI)).pow(k) / n
+            second = true
+        } else {
+            cosinus += (x % (2 * PI)).pow(k) / n
+            second = false
+        }
+        k += 2
+        n *= (k - 1) * k
     }
+    return cosinus
 }
 
 /**
@@ -279,18 +287,7 @@ fun revert(n: Int): Int {
  */
 
 
-fun isPalindrome(n: Int): Boolean {
-    //Решение через revert в моём видении
-    var r = revert(abs(n))
-    var l = abs(n)
-    while (l > 0) {
-        if (l % 10 != r % 10)
-            return false
-        r /= 10
-        l /= 10
-    }
-    return true
-}
+fun isPalindrome(n: Int): Boolean = n == revert(n)
 
 /**
  * Средняя

@@ -238,7 +238,7 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var cosinus: Double = 1.0
+    var cosinus = 1.0
     var k = 2
     var n = 2.0
     var second = false

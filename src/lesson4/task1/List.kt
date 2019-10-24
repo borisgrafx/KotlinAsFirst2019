@@ -117,12 +117,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var k = 0.0
-    for (element in v)
-        k += element.pow(2)
-    return sqrt(k)
-}
+fun abs(v: List<Double>): Double = sqrt(((squares(v.map { it.toInt() })).sum()).toDouble())
 
 /**
  * Простая
@@ -153,12 +148,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var c = 0
-    for (i in a.indices)
-        c += a[i] * b[i]
-    return c
-}
+fun times(a: List<Int>, b: List<Int>): Int = a.map { it * b[a.indexOf(it)] }.sum()
 
 /**
  * Средняя
@@ -168,15 +158,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    var sum = 0
-    if (p.isNotEmpty())
-        sum = p[0]
-    else return 0
-    for (i in 1 until p.size)
-        sum += p[i] * (x.toDouble().pow(i)).toInt()
-    return sum
-}
+fun polynom(p: List<Int>, x: Int): Int = p.map { it * (x.toDouble().pow(p.indexOf(it))).toInt() }.sum()
 
 /**
  * Средняя
@@ -203,7 +185,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     var n1 = n
-    val m: MutableList<Int> = mutableListOf()
+    val m = mutableListOf<Int>()
     while (n1 > 1) {
         m.add(minDivisor(n1))
         n1 /= minDivisor(n1)
@@ -218,18 +200,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var n1 = n
-    var k = minDivisor(n1)
-    var m = "$k"
-    n1 /= minDivisor(n1)
-    while (n1 > 1) {
-        k = minDivisor(n1)
-        m += "*$k"
-        n1 /= minDivisor(n1)
-    }
-    return m
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -239,11 +210,15 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    val m: MutableList<Int> = mutableListOf()
+    val m = mutableListOf<Int>()
     var n1 = n
-    while (n1 > 0) {
-        m.add(n1 % base)
-        n1 /= base
+    if (n == 0)
+        m.add(0)
+    else {
+        while (n1 > 0) {
+            m.add(n1 % base)
+            n1 /= base
+        }
     }
     return m.reversed()
 }
@@ -259,7 +234,22 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    var m = ""
+    var n1 = n
+    if (n == 0)
+        m = "0"
+    else {
+        while (n1 > 0) {
+            m = if (n1 % base < 10)
+                (n1 % base).toString() + m
+            else
+                ((n1 % base + 87).toChar()).toString() + m
+            n1 /= base
+        }
+    }
+    return m
+}
 
 /**
  * Средняя
@@ -268,7 +258,12 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var fin = 0
+    for (i in digits.indices)
+        fin += digits[i] * ((base.toDouble()).pow(digits.size - 1 - i)).toInt()
+    return fin
+}
 
 /**
  * Сложная
@@ -282,7 +277,16 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var sum = 0
+    for (i in str.indices) {
+        sum += if (str[i].toInt() in 48..57)
+            (str[i].toInt() - 48) * (base.toDouble().pow(str.length - 1 - i)).toInt()
+        else
+            (str[i].toInt() - 87) * (base.toDouble().pow(str.length - 1 - i)).toInt()
+    }
+    return sum
+}
 
 /**
  * Сложная

@@ -91,6 +91,8 @@ class Tests {
         assertEquals(3.0, abs(listOf(3.0)), 1e-5)
         assertEquals(5.0, abs(listOf(3.0, -4.0)), 1e-5)
         assertEquals(8.774964, abs(listOf(4.0, -5.0, 6.0)), 1e-5)
+        //тест с котоеда. Оказывается, в идее он работает. В котоеде же - нет. Причина в delta?
+        assertEquals(3.0145369596514554e-9, abs(listOf(3.0145369596514554e-9)), 1e-5)
     }
 
     @Test

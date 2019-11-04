@@ -117,7 +117,8 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = sqrt(((squares(v.map { it.toInt() })).sum()).toDouble())
+//Такой вариант подойдёт? А то с sumToDouble у меня что-то не получается.
+fun abs(v: List<Double>): Double = sqrt((v.map { it.pow(2) }).sum())
 
 /**
  * Простая
@@ -148,7 +149,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = a.map { it * b[a.indexOf(it)] }.sum()
+fun times(a: List<Int>, b: List<Int>): Int = a.mapIndexed { index, it -> it * b[index] }.sum()
 
 /**
  * Средняя
@@ -158,7 +159,7 @@ fun times(a: List<Int>, b: List<Int>): Int = a.map { it * b[a.indexOf(it)] }.sum
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = p.map { it * (x.toDouble().pow(p.indexOf(it))).toInt() }.sum()
+fun polynom(p: List<Int>, x: Int): Int = p.mapIndexed { index, it -> it * (x.toDouble().pow(index)).toInt() }.sum()
 
 /**
  * Средняя
@@ -234,22 +235,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String {
-    var m = ""
-    var n1 = n
-    if (n == 0)
-        m = "0"
-    else {
-        while (n1 > 0) {
-            m = if (n1 % base < 10)
-                (n1 % base).toString() + m
-            else
-                ((n1 % base + 87).toChar()).toString() + m
-            n1 /= base
-        }
-    }
-    return m
-}
+fun convertToString(n: Int, base: Int): String =
+    convert(n, base).joinToString(separator = "") { if (it > 9) "${'a' - 10 + it}" else "$it" }
 
 /**
  * Средняя
@@ -258,12 +245,9 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int {
-    var fin = 0
-    for (i in digits.indices)
-        fin += digits[i] * ((base.toDouble()).pow(digits.size - 1 - i)).toInt()
-    return fin
-}
+fun decimal(digits: List<Int>, base: Int): Int =
+    //С fold у меня не получилось, и я попробовал такой вариант
+    digits.mapIndexed { index, it -> it * (base.toDouble().pow(digits.size - 1 - index)).toInt() }.sum()
 
 /**
  * Сложная
@@ -277,16 +261,9 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int {
-    var sum = 0
-    for (i in str.indices) {
-        sum += if (str[i].toInt() in 48..57)
-            (str[i].toInt() - 48) * (base.toDouble().pow(str.length - 1 - i)).toInt()
-        else
-            (str[i].toInt() - 87) * (base.toDouble().pow(str.length - 1 - i)).toInt()
-    }
-    return sum
-}
+fun decimalFromString(str: String, base: Int): Int =
+    decimal(str.map { if (it >= 'a') it - 'a' + 10 else it.toInt() - 48 }, base)
+//Тут от константы 48 я не придумал, как избавиться(
 
 /**
  * Сложная
@@ -296,7 +273,68 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    var n1 = n
+    var num = ""
+    while (n1 > 0) {
+        when {
+            n1 / 1000 > 0 -> {
+                num += "M"
+                n1 -= 1000
+            }
+            (n1 % 1000) / 100 == 9 -> {
+                num += "CM"
+                n1 -= 900
+            }
+            (n1 % 1000) / 100 >= 5 -> {
+                num += "D"
+                n1 -= 500
+            }
+            (n1 % 1000) / 100 == 4 -> {
+                num += "CD"
+                n1 -= 400
+            }
+            (n1 % 1000) / 100 >= 1 -> {
+                num += "C"
+                n1 -= 100
+            }
+            (n1 % 100) / 10 == 9 -> {
+                num += "XC"
+                n1 -= 90
+            }
+            (n1 % 100) / 10 >= 5 -> {
+                num += "L"
+                n1 -= 50
+            }
+            (n1 % 100) / 10 == 4 -> {
+                num += "XL"
+                n1 -= 40
+            }
+            (n1 % 100) / 10 >= 1 -> {
+                num += "X"
+                n1 -= 10
+            }
+            n1 % 10 == 9 -> {
+                num += "IX"
+                n1 -= 9
+            }
+            n1 % 10 >= 5 -> {
+                num += "V"
+                n1 -= 5
+            }
+            n1 % 10 == 4 -> {
+                num += "IV"
+                n1 -= 4
+            }
+            n1 % 10 >= 1 -> {
+                num += "I"
+                n1 -= 1
+            }
+            else -> num += ""
+        }
+    }
+    return num
+}
 
 /**
  * Очень сложная
@@ -371,7 +409,7 @@ fun russian(n: Int): String {
         }
         if (thous) {
             num += when {
-                (n1 % 10 in 2..4) && (n1 % 100 < 10 || n1 % 100 > 20)  -> "тысячи "
+                (n1 % 10 in 2..4) && (n1 % 100 < 10 || n1 % 100 > 20) -> "тысячи "
                 (n1 % 10 == 1) && (n1 % 100 < 10 || n1 % 100 > 20) -> "тысяча "
                 else -> "тысяч "
             }

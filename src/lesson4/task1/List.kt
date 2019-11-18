@@ -117,8 +117,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-//Такой вариант подойдёт? А то с sumToDouble у меня что-то не получается.
-fun abs(v: List<Double>): Double = sqrt((v.map { it.pow(2) }).sum())
+fun abs(v: List<Double>): Double = sqrt(v.sumByDouble { it.pow(2) })
 
 /**
  * Простая
@@ -262,8 +261,7 @@ fun decimal(digits: List<Int>, base: Int): Int =
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int =
-    decimal(str.map { if (it >= 'a') it - 'a' + 10 else it.toInt() - 48 }, base)
-//Тут от константы 48 я не придумал, как избавиться(
+    decimal(str.map { if (it >= 'a') it - 'a' + 10 else it - '0' }, base)
 
 /**
  * Сложная

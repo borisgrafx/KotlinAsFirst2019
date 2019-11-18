@@ -103,7 +103,13 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    var contain = true
+    for ((key, value) in a)
+        if (a[key] != b[key] || a[value] != b[value])
+            contain = false
+    return contain
+}
 
 /**
  * Простая
@@ -119,7 +125,11 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+    for ((key, value) in b)
+        if (a[key] == b[key] && a[value] == b[value])
+            a.remove(key)
+}
 
 /**
  * Простая
@@ -128,7 +138,15 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TO
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+// Мне очень не нравится этот двойной цикл, но почему-то альтернативное решение в голову не идёт(
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val setval = mutableListOf<String>()
+    for (i in a.indices)
+        for (element in b)
+            if (a[i] == element)
+                setval += a[i]
+    return (setval.toSet()).toList()
+}
 
 /**
  * Средняя
@@ -148,7 +166,22 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
-
+//Вообще не хочет работать((( Перепробовал много разных способов, но значение 911 в третьем тесте не удаляется из "B", из-за чего в конченом "А" выходит не "112, 911", а "911"
+/*{
+    val mapperA: MutableMap<String, String> = mapA.toMutableMap()
+    val mapperB: MutableMap<String, String> = mapB.toMutableMap()
+    val TelsToRemove = mutableListOf<String>()
+    for ((key, value) in mapperA)
+        if (mapperB.containsKey(key) && mapperB[value] != mapperA[value]) {
+            mapperA[value] += ", " + mapperB[value]
+            TelsToRemove.add(value)
+        }
+    for (value in TelsToRemove)
+        mapperB.remove(value)
+    mapperA.putAll(mapperB)
+    return mapperA.toMap()
+}
+*/
 /**
  * Средняя
  *

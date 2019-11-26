@@ -192,7 +192,22 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    var s = 0.0
+    var k: Int
+    val mapper: MutableMap<String, Double> = mutableMapOf()
+    for (i in stockPrices.indices) {
+        k = 0
+        s = 0.0
+        for (j in stockPrices.indices)
+            if (stockPrices[i].first == stockPrices[j].first) {
+                s += stockPrices[j].second
+                k += 1
+            }
+        mapper += Pair(stockPrices[i].first, s / k)
+    }
+    return mapper
+}
 
 /**
  * Средняя
@@ -220,7 +235,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean = chars.containsAll(word.toSet())
 
 /**
  * Средняя
@@ -234,7 +249,19 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    var k: Int
+    val mapper: MutableMap<String, Int> = mutableMapOf()
+    for (i in list.indices) {
+        k = 0
+        for (j in list.indices)
+            if (list[i] == list[j])
+                k += 1
+        if (k > 1)
+            mapper += Pair(list[i], k)
+    }
+    return mapper
+}
 
 /**
  * Средняя

@@ -272,64 +272,16 @@ fun decimalFromString(str: String, base: Int): Int =
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
+    val roman = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val arabian = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     var n1 = n
+    var i = 0
     var num = ""
     while (n1 > 0) {
-        when {
-            n1 / 1000 > 0 -> {
-                num += "M"
-                n1 -= 1000
-            }
-            (n1 % 1000) / 100 == 9 -> {
-                num += "CM"
-                n1 -= 900
-            }
-            (n1 % 1000) / 100 >= 5 -> {
-                num += "D"
-                n1 -= 500
-            }
-            (n1 % 1000) / 100 == 4 -> {
-                num += "CD"
-                n1 -= 400
-            }
-            (n1 % 1000) / 100 >= 1 -> {
-                num += "C"
-                n1 -= 100
-            }
-            (n1 % 100) / 10 == 9 -> {
-                num += "XC"
-                n1 -= 90
-            }
-            (n1 % 100) / 10 >= 5 -> {
-                num += "L"
-                n1 -= 50
-            }
-            (n1 % 100) / 10 == 4 -> {
-                num += "XL"
-                n1 -= 40
-            }
-            (n1 % 100) / 10 >= 1 -> {
-                num += "X"
-                n1 -= 10
-            }
-            n1 % 10 == 9 -> {
-                num += "IX"
-                n1 -= 9
-            }
-            n1 % 10 >= 5 -> {
-                num += "V"
-                n1 -= 5
-            }
-            n1 % 10 == 4 -> {
-                num += "IV"
-                n1 -= 4
-            }
-            n1 % 10 >= 1 -> {
-                num += "I"
-                n1 -= 1
-            }
-            else -> num += ""
-        }
+        if (n1 / arabian[i] > 0) {
+            num += roman[i]
+            n1 -= arabian[i]
+        } else i += 1
     }
     return num
 }

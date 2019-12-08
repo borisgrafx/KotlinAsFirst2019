@@ -138,15 +138,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-// Мне очень не нравится этот двойной цикл, но почему-то альтернативное решение в голову не идёт(
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    val setval = mutableListOf<String>()
-    for (i in a.indices)
-        for (element in b)
-            if (a[i] == element)
-                setval += a[i]
-    return (setval.toSet()).toList()
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = (a intersect b).toList()
 
 /**
  * Средняя
@@ -166,16 +158,15 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
-//Вообще не хочет работать((( Перепробовал много разных способов, но значение 911 в третьем тесте не удаляется из "B", из-за чего в конченом "А" выходит не "112, 911", а "911"
-/*{
-    val mapperA: MutableMap<String, String> = mapA.toMutableMap()
+/* val mapperA: MutableMap<String, String> = mapA.toMutableMap()
     val mapperB: MutableMap<String, String> = mapB.toMutableMap()
     val TelsToRemove = mutableListOf<String>()
-    for ((key, value) in mapperA)
-        if (mapperB.containsKey(key) && mapperB[value] != mapperA[value]) {
-            mapperA[value] += ", " + mapperB[value]
-            TelsToRemove.add(value)
-        }
+    for ((key, value) in mapperB)
+        if (mapperA.containsKey(key))
+            if (mapperB[value].contains(mapperA[value]))
+                mapperA[value] += ", " + mapperB[value]
+    else mapperA
+
     for (value in TelsToRemove)
         mapperB.remove(value)
     mapperA.putAll(mapperB)
@@ -193,9 +184,10 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    //Другие комментарии к этому уроку исправлю попозже
     var s = 0.0
     var k: Int
-    val mapper: MutableMap<String, Double> = mutableMapOf()
+    val mapper = mutableMapOf<String, Double>()
     for (i in stockPrices.indices) {
         k = 0
         s = 0.0
@@ -317,7 +309,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in 0..list.size - 2)
+        for (j in (i + 1)..list.size)
+            if (list[i] + list[j] == number)
+                return Pair(i, j)
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная

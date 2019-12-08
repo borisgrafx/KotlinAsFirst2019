@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -69,7 +71,34 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    return try {
+        val splitter = str.split(" ").toMutableList()
+        if (splitter.size != 3) throw Exception()
+        when (splitter[1]) {
+            "января" -> splitter[1] = "01"
+            "февраля" -> splitter[1] = "02"
+            "марта" -> splitter[1] = "03"
+            "апреля" -> splitter[1] = "04"
+            "мая" -> splitter[1] = "05"
+            "июня" -> splitter[1] = "06"
+            "июля" -> splitter[1] = "07"
+            "августа" -> splitter[1] = "08"
+            "сентября" -> splitter[1] = "09"
+            "октября" -> splitter[1] = "10"
+            "ноября" -> splitter[1] = "11"
+            "декабря" -> splitter[1] = "12"
+            else -> throw Exception()
+        }
+        if (daysInMonth(splitter[1].toInt(), splitter[2].toInt()) >= splitter[0].toInt()) {
+            if (splitter[0].toInt() < 10)
+                splitter[0] = "0" + splitter[0]
+        } else throw Exception()
+        return splitter.joinToString(separator = ".")
+    } catch (ex: Exception) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -81,7 +110,34 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    return try {
+        val splitter = digital.split(".").toMutableList()
+        if ((daysInMonth(splitter[1].toInt(), splitter[2].toInt()) >= splitter[0].toInt()) && splitter.size == 3) {
+            if (splitter[0].toInt() < 10)
+                splitter[0] = (splitter[0].toInt()).toString()
+        } else throw Exception()
+        when (splitter[1]) {
+            "01" -> splitter[1] = "января"
+            "02" -> splitter[1] = "февраля"
+            "03" -> splitter[1] = "марта"
+            "04" -> splitter[1] = "апреля"
+            "05" -> splitter[1] = "мая"
+            "06" -> splitter[1] = "июня"
+            "07" -> splitter[1] = "июля"
+            "08" -> splitter[1] = "августа"
+            "09" -> splitter[1] = "сентября"
+            "10" -> splitter[1] = "октября"
+            "11" -> splitter[1] = "ноября"
+            "12" -> splitter[1] = "декабря"
+            else -> throw Exception()
+        }
+        return splitter.joinToString(separator = " ")
+
+    } catch (ex: Exception) {
+        ""
+    }
+}
 
 /**
  * Средняя
@@ -133,7 +189,21 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val splitter = expression.split(" ").toMutableList()
+    var sum = splitter[0].toInt()
+    require(expression[0] in '0'..'9')
+    for (i in 2 until splitter.size step 2) {
+        require(splitter[i].toInt() >= 0)
+        when {
+            splitter[i - 1] == "+" -> sum += splitter[i].toInt()
+            splitter[i - 1] == "-" -> sum -= splitter[i].toInt()
+            else -> throw IllegalArgumentException()
+        }
+    }
+    return sum
+
+}
 
 /**
  * Сложная
@@ -144,7 +214,20 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val splitter = str.split(" ").map { it.toLowerCase() }
+    var num = 0
+    var sumind = 0
+    for (i in 0..splitter.size - 2) {
+        if (splitter[i] == splitter[i + 1])
+            num = i
+    }
+    if (num > 0)
+        for (i in 0 until num)
+            sumind += splitter[i].length + 1
+    else return -1
+    return sumind
+}
 
 /**
  * Сложная
@@ -157,7 +240,23 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше либо равны нуля.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    return try {
+        val splitter = description.split(" ")
+        var maxcost = 0.0
+        var product = ""
+        for (i in 1 until splitter.size step 2) {
+
+            if ((splitter[i].substringBefore(';')).toDouble() > maxcost) {
+                maxcost = (splitter[i].substringBefore(';')).toDouble()
+                product = splitter[i - 1]
+            }
+        }
+        return product
+    } catch (ex: Exception) {
+        ""
+    }
+}
 
 /**
  * Сложная

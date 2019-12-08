@@ -92,7 +92,7 @@ fun dateStrToDigit(str: String): String {
         }
         if (daysInMonth(splitter[1].toInt(), splitter[2].toInt()) >= splitter[0].toInt()) {
             if (splitter[0].toInt() < 10)
-                splitter[0] = "0" + splitter[0]
+                splitter[0] = "0" + splitter[0].toInt()
         } else throw Exception()
         return splitter.joinToString(separator = ".")
     } catch (ex: Exception) {
@@ -190,19 +190,22 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val splitter = expression.split(" ").toMutableList()
-    var sum = splitter[0].toInt()
-    require(expression[0] in '0'..'9')
-    for (i in 2 until splitter.size step 2) {
-        require(splitter[i].toInt() >= 0)
-        when {
-            splitter[i - 1] == "+" -> sum += splitter[i].toInt()
-            splitter[i - 1] == "-" -> sum -= splitter[i].toInt()
-            else -> throw IllegalArgumentException()
+    return try {
+        val splitter = expression.split(" ").toMutableList()
+        var sum = splitter[0].toInt()
+        require(expression[0] in '0'..'9')
+        for (i in 2 until splitter.size step 2) {
+            require(splitter[i].toInt() >= 0)
+            when {
+                splitter[i - 1] == "+" -> sum += splitter[i].toInt()
+                splitter[i - 1] == "-" -> sum -= splitter[i].toInt()
+                else -> throw IllegalArgumentException()
+            }
         }
+        return sum
+    } catch (ex: Exception) {
+        throw IllegalArgumentException()
     }
-    return sum
-
 }
 
 /**
@@ -216,13 +219,13 @@ fun plusMinus(expression: String): Int {
  */
 fun firstDuplicateIndex(str: String): Int {
     val splitter = str.split(" ").map { it.toLowerCase() }
-    var num = 0
+    var num = -1
     var sumind = 0
     for (i in 0..splitter.size - 2) {
         if (splitter[i] == splitter[i + 1])
             num = i
     }
-    if (num > 0)
+    if (num != -1)
         for (i in 0 until num)
             sumind += splitter[i].length + 1
     else return -1

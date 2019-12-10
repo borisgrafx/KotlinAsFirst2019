@@ -165,7 +165,21 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    return try {
+        val splitter = jumps.split(" ")
+        var max = -1
+        for (i in splitter.indices) {
+            if (splitter[i] in "0".."$Int.MAX_VALUE") {
+                if (splitter[i].toInt() > max)
+                    max = splitter[i].toInt()
+            } else splitter[i].forEach { if (it != '%' && it != '-') return -1 }
+        }
+        return max
+    } catch (ex: Exception) {
+        -1
+    }
+}
 
 /**
  * Сложная
@@ -178,7 +192,23 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    return try {
+        val value = Int.MAX_VALUE
+        val splitter = jumps.split(" ")
+        var max = -1
+        if (splitter.size == 1) return splitter[0].toInt()
+        for (i in 0..splitter.size - 2) {
+            if (splitter[i] in "0".."$Int.MAX_VALUE")  {
+                if (splitter[i].toInt() > max && splitter[i + 1].any {it == '+'})
+                    max = splitter[i].toInt()
+            } else splitter[i].forEach { if (it != '+' && it != '-' && it != '%') return -1}
+        }
+        return max
+    } catch (ex: Exception) {
+        -1
+    }
+}
 
 /**
  * Сложная
@@ -222,8 +252,10 @@ fun firstDuplicateIndex(str: String): Int {
     var num = -1
     var sumind = 0
     for (i in 0..splitter.size - 2) {
-        if (splitter[i] == splitter[i + 1])
+        if (splitter[i] == splitter[i + 1]) {
             num = i
+            break
+        }
     }
     if (num != -1)
         for (i in 0 until num)

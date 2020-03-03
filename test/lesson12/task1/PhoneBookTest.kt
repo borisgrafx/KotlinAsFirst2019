@@ -59,6 +59,13 @@ internal class PhoneBookTest {
     }
 
     @Test
+    fun phones2() {
+        val book = PhoneBook()
+        assertTrue(book.addHuman("Иванов Петр"))
+        assertEquals(setOf(""), book.phones("Иванов Петр"))
+    }
+
+    @Test
     fun humanByPhone() {
         val book = PhoneBook()
         assertTrue(book.addHuman("Иванов Петр"))
@@ -70,9 +77,19 @@ internal class PhoneBookTest {
         assertEquals("Иванов Петр", book.humanByPhone("+78121234567"))
         assertNull(book.humanByPhone("+78127654321"))
     }
+    @Test
+    fun humanByPhone2() {
+        val book = PhoneBook()
+        assertTrue(book.addHuman("Иванов Петр"))
+        assertTrue(book.addHuman("Васильев Дмитрий"))
+        assertTrue(book.addPhone("Иванов Петр", "+79211234567"))
+        assertFalse(book.addPhone("Васильев Дмитрий", "+79211234567"))
+        assertEquals("Иванов Петр", book.humanByPhone("+79211234567"))
+        assertNull(book.humanByPhone("+1"))
+    }
 
     @Test
-    fun testEquals() {
+    fun testEquals1() {
         val book = PhoneBook()
         assertTrue(book.addHuman("Иванов Петр"))
         assertTrue(book.addHuman("Васильев Дмитрий"))
@@ -86,6 +103,43 @@ internal class PhoneBookTest {
         assertTrue(book2.addPhone("Васильев Дмитрий", "+79217654321"))
         assertTrue(book2.addPhone("Иванов Петр", "+79211234567"))
         assertTrue(book == book2)
+    }
+
+    @Test
+    fun testEquals2() {
+        val book = PhoneBook()
+        val book2 = PhoneBook()
+        assertTrue(book2.addHuman("Васильев Дмитрий"))
+        assertFalse(book == book2)
+    }
+
+    @Test
+    fun testEquals3() {
+        val book = PhoneBook()
+        assertTrue(book.addHuman("Иванов Петр"))
+        assertTrue(book.addHuman("Васильев Дмитрий"))
+        assertTrue(book.addPhone("Иванов Петр", "+1"))
+        assertTrue(book.addPhone("Иванов Петр", "+2"))
+        assertTrue(book.addPhone("Васильев Дмитрий", "+3"))
+        val book2 = PhoneBook()
+        assertTrue(book2.addHuman("Васильев Дмитрий"))
+        assertTrue(book2.addHuman("Иванов Петр"))
+        assertTrue(book2.addPhone("Иванов Петр", "+2"))
+        assertTrue(book2.addPhone("Васильев Дмитрий", "+3"))
+        assertTrue(book2.addPhone("Иванов Петр", "+1"))
+        assertTrue(book == book2)
+    }
+
+    @Test
+    fun testEquals4() {
+        val book = PhoneBook()
+        assertTrue(book.addHuman("Иванов Петр"))
+        assertTrue(book.addHuman("Васильев Дмитрий"))
+        assertTrue(book.addHuman("Зуев Иоанн"))
+        val book2 = PhoneBook()
+        assertTrue(book2.addHuman("Васильев Дмитрий"))
+        assertTrue(book2.addHuman("Иванов Петр"))
+        assertFalse(book == book2)
     }
 
     @Test

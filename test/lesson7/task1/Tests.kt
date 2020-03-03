@@ -1,6 +1,7 @@
 package lesson7.task1
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -97,6 +98,15 @@ Basic, Ruby, Swift.
         )
         File("temp.txt").delete()
     }
+
+    @Test
+    fun formulaOne() {
+        assertEquals("Мерседес", formulaOne("input/ForEXAM1.txt"))
+        assertEquals("Программисты Котлин, сдающие экзамен", formulaOne("input/ForEXAM2.txt"))
+        assertEquals("Форд", formulaOne("input/ForEXAM3.txt"))
+        assertThrows(IllegalArgumentException::class.java) { formulaOne("input/ForEXAM4.txt") }
+    }
+
 
     @Test
     @Tag("Normal")

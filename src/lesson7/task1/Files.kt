@@ -99,6 +99,56 @@ fun sibilants(inputName: String, outputName: String) {
     writer.close()
 }
 
+/*
+fun converter(b: String): Int {
+    if (b.first() != '+') return 0
+    val j = b.split(Regex(""".,\+"""))
+    return j[0].toInt() * 60 + j[1].toInt() * 1000 + j[2].toInt()
+}
+
+fun sorter(inputName: String): String {
+    val list = File(inputName).readLines()
+    var millisec = mutableListOf(Int)
+    for (i in 1 until list.size) {
+        val a = File(inputName).readLines()[i].split(" ")
+        var time = converter(a.last())
+
+
+    }
+}
+*/
+
+fun formulaOne(inputName: String): String {
+    val racersTeam = mutableListOf<String>()
+    val racersScore = mutableListOf<Int>()
+    var teams = mutableSetOf<String>()
+    val scores = mutableListOf<Int>()
+    val reader = File(inputName).readLines()
+    try {
+        for (i in 1 until reader.size) {
+            val quickList = reader[i].split(" ").toMutableList()
+            quickList += " "
+            var k = 2
+            while (quickList[k + 1].first() != '+' && quickList[k + 1] != " ") {
+                quickList[2] += " " + quickList[k + 1]
+                k++
+            }
+            racersTeam += quickList[2]
+            racersScore += reader.size - i
+        }
+        teams = racersTeam.toMutableSet()
+        for (i in 0 until teams.size) {
+            scores += 0
+            for (j in 0 until racersTeam.size)
+                if (racersTeam[j] == teams.toList()[i])
+                    scores[i] += racersScore[j]
+        }
+        return teams.toList()[scores.indexOf(scores.max())]
+    } catch (ex: Exception) {
+        throw IllegalArgumentException()
+    }
+}
+
 /**
  * Средняя
  *

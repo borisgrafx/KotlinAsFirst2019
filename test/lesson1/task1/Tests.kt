@@ -105,4 +105,10 @@ class Tests {
         assertEquals(874, numberRevert(478))
         assertEquals(201, numberRevert(102))
     }
+
+    @Test
+    fun sumMinusSquare() {
+        assertEquals(-2, sumMinusSquare(2, 1))
+        assertEquals(-4, sumMinusSquare(2, 2))
+    }
 }
